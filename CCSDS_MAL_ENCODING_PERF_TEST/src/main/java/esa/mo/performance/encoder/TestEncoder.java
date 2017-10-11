@@ -18,8 +18,9 @@
  * limitations under the License. 
  * ----------------------------------------------------------------------------
  */
-package esa.mo.encoderperf;
+package esa.mo.performance.encoder;
 
+import esa.mo.performance.util.TestStructureBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -55,7 +56,7 @@ public class TestEncoder
 
     Object testXMLComposite = TestStructureBuilder.createTestXMLComposite(now, pktsPerReport, paramsPerPkt);
 
-    results.add(new Results("esa.mo.encoderperf.TestXMLStreamFactory", false, false, testXMLComposite, testXMLComposite));
+    results.add(new Results("esa.mo.performance.encoder.TestXMLStreamFactory", false, false, testXMLComposite, testXMLComposite));
     //results.add(new Results("esa.mo.mal.encoder.line.LineStreamFactory", false, true, size));
     results.add(new Results("esa.mo.mal.encoder.string.StringStreamFactory", false, false, pktsPerReport, paramsPerPkt, timestamp));
     //results.add(new Results("fr.cnes.maljoram.malencoding.JORAMElementStreamFactory", false, false, pktsPerReport, paramsPerPkt, timestamp));
@@ -63,7 +64,7 @@ public class TestEncoder
     results.add(new Results("esa.mo.mal.encoder.binary.split.SplitBinaryStreamFactory", false, false, pktsPerReport, paramsPerPkt, timestamp));
     results.add(new Results("esa.mo.mal.encoder.binary.fixed.FixedBinaryStreamFactory", false, false, pktsPerReport, paramsPerPkt, timestamp));
     
-    results.add(new Results("esa.mo.encoderperf.TestXMLStreamFactory", true, false, testXMLComposite, testXMLComposite));
+    results.add(new Results("esa.mo.performance.encoder.TestXMLStreamFactory", true, false, testXMLComposite, testXMLComposite));
     //results.add(new Results("esa.mo.mal.encoder.line.LineStreamFactory", true, false, size));
     results.add(new Results("esa.mo.mal.encoder.string.StringStreamFactory", true, false, pktsPerReport, paramsPerPkt, timestamp));
     //results.add(new Results("fr.cnes.maljoram.malencoding.JORAMElementStreamFactory", true, false, pktsPerReport, paramsPerPkt, timestamp));
