@@ -65,5 +65,6 @@
     <module>CCSDS_MAL_DEMO</module>
     <module>CCSDS_MAL_ENCODING_PERF_TEST</module>
     <module>CCSDS_MAL_TRANSPORT_BRIDGE</module>
+    <module>CCSDS_MC_MITY_DEMO</module>
   </modules>
 </project>
