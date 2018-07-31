@@ -67,7 +67,7 @@
   <properties>
     <ccsds.specification.download.ref-skip>false</ccsds.specification.download.ref-skip>
     <esa.stubgen.xmlDirectory>src/main/resources/xml</esa.stubgen.xmlDirectory>
-    <assembly.mainClass>esa.mo.encoderperf.TestEncoder</assembly.mainClass>
+    <assembly.mainClass>esa.mo.performance.encoder.TestEncoder</assembly.mainClass>
   </properties>
 
   <dependencies>
