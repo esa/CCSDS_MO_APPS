@@ -122,11 +122,11 @@ public class DemoConsumerGui extends javax.swing.JFrame
     }
     catch (MalformedURLException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Consumer {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Consumer", ex);
     }
     catch (MALException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Consumer {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Consumer", ex);
     }
   }
 
@@ -577,7 +577,7 @@ public class DemoConsumerGui extends javax.swing.JFrame
       }
       catch (MALException ex)
       {
-        LOGGER.log(Level.SEVERE, "Exception during close down of the consumer {0}", ex);
+        LOGGER.log(Level.SEVERE, "Exception during close down of the consumer", ex);
       }
 
       dispose();
