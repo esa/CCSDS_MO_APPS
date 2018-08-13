@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ccsds.moims.mo.mal.MALException;
@@ -40,7 +41,7 @@ public class DemoProviderGui extends javax.swing.JFrame
    * Logger
    */
   public static final java.util.logging.Logger LOGGER = Logger.getLogger("org.ccsds.moims.mo.mal.demo.provider");
-  private final DemoProviderServiceImpl handler = new DemoProviderServiceImpl();
+  private final DemoProviderServiceImpl serviceProvider = new DemoProviderServiceImpl();
   private final String defaultProtocol;
 
   /**
@@ -71,7 +72,7 @@ public class DemoProviderGui extends javax.swing.JFrame
       final String name = System.getProperty("application.name", "DemoServiceProvider");
 
       final DemoProviderGui gui = new DemoProviderGui(name);
-      gui.handler.init();
+      gui.serviceProvider.init();
 
       EventQueue.invokeLater(new Runnable()
       {
@@ -83,15 +84,15 @@ public class DemoProviderGui extends javax.swing.JFrame
     }
     catch (MalformedURLException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider", ex);
     }
     catch (MALException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider", ex);
     }
     catch (MALInteractionException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider", ex);
     }
   }
 
@@ -137,8 +138,8 @@ public class DemoProviderGui extends javax.swing.JFrame
 
     ((javax.swing.SpinnerNumberModel) poolSize.getModel()).setMinimum(1);
     ((javax.swing.SpinnerNumberModel) blockSize.getModel()).setMinimum(1);
-    ((javax.swing.SpinnerNumberModel) poolSize.getModel()).setValue(handler.getPoolSize());
-    ((javax.swing.SpinnerNumberModel) blockSize.getModel()).setValue(handler.getBlockSize());
+    ((javax.swing.SpinnerNumberModel) poolSize.getModel()).setValue(serviceProvider.getPoolSize());
+    ((javax.swing.SpinnerNumberModel) blockSize.getModel()).setValue(serviceProvider.getBlockSize());
     
     updateRateStateChanged(null);
   }
@@ -154,8 +155,11 @@ public class DemoProviderGui extends javax.swing.JFrame
 
     mainPanel = new javax.swing.JPanel();
     controlsPanel = new javax.swing.JPanel();
-    jLabel2 = new javax.swing.JLabel();
+    updateRateLabel = new javax.swing.JLabel();
+    sliderPanel = new javax.swing.JPanel();
+    jLabel5 = new javax.swing.JLabel();
     updateRate = new javax.swing.JSlider();
+    jLabel6 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     poolSize = new javax.swing.JSpinner();
     jLabel4 = new javax.swing.JLabel();
@@ -190,15 +194,25 @@ public class DemoProviderGui extends javax.swing.JFrame
     controlsPanel.setName("controlsPanel"); // NOI18N
     controlsPanel.setLayout(new java.awt.GridLayout(3, 2));
 
-    jLabel2.setText("Update rate");
-    jLabel2.setName("jLabel2"); // NOI18N
-    controlsPanel.add(jLabel2);
+    updateRateLabel.setText("Update rate [1 s]");
+    updateRateLabel.setName("updateRateLabel"); // NOI18N
+    updateRateLabel.setPreferredSize(new java.awt.Dimension(60, 16));
+    controlsPanel.add(updateRateLabel);
+
+    sliderPanel.setName("sliderPanel"); // NOI18N
+
+    jLabel5.setText("5 s");
+    jLabel5.setName("jLabel5"); // NOI18N
+    sliderPanel.add(jLabel5);
+    jLabel5.getAccessibleContext().setAccessibleDescription("");
 
     updateRate.setMajorTickSpacing(1);
     updateRate.setMaximum(11);
     updateRate.setPaintTicks(true);
-    updateRate.setValue(10);
+    updateRate.setToolTipText("");
+    updateRate.setValue(9);
     updateRate.setName("updateRate"); // NOI18N
+    updateRate.setPreferredSize(new java.awt.Dimension(140, 36));
     updateRate.addChangeListener(new javax.swing.event.ChangeListener()
     {
       public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -206,7 +220,14 @@ public class DemoProviderGui extends javax.swing.JFrame
         updateRateStateChanged(evt);
       }
     });
-    controlsPanel.add(updateRate);
+    sliderPanel.add(updateRate);
+    updateRate.getAccessibleContext().setAccessibleDescription("");
+
+    jLabel6.setText("0 s");
+    jLabel6.setName("jLabel6"); // NOI18N
+    sliderPanel.add(jLabel6);
+
+    controlsPanel.add(sliderPanel);
 
     jLabel3.setText("Pool size");
     jLabel3.setName("jLabel3"); // NOI18N
@@ -332,20 +353,20 @@ public class DemoProviderGui extends javax.swing.JFrame
 
     private void quitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_quitMenuItemActionPerformed
     {//GEN-HEADEREND:event_quitMenuItemActionPerformed
-      handler.close();
+      serviceProvider.close();
       dispose();
     }//GEN-LAST:event_quitMenuItemActionPerformed
 
     private void genTMMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_genTMMenuItemActionPerformed
     {//GEN-HEADEREND:event_genTMMenuItemActionPerformed
-      handler.startGeneration();
+      serviceProvider.startGeneration();
       statusLabel.setText("GENERATING");
       statusLabel.setBackground(Color.ORANGE);
     }//GEN-LAST:event_genTMMenuItemActionPerformed
 
     private void pauseTMMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_pauseTMMenuItemActionPerformed
     {//GEN-HEADEREND:event_pauseTMMenuItemActionPerformed
-      handler.pauseGeneration();
+      serviceProvider.pauseGeneration();
       statusLabel.setText("PAUSED");
       statusLabel.setBackground(Color.GRAY);
 
@@ -353,26 +374,29 @@ public class DemoProviderGui extends javax.swing.JFrame
 
     private void updateRateStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_updateRateStateChanged
     {//GEN-HEADEREND:event_updateRateStateChanged
-      if (0 < updateRate.getValue())
-      {
-        handler.setSleep((11 - updateRate.getValue()) * 1000);
-      }
-      else
-      {
-        handler.pauseGeneration();
-        statusLabel.setText("PAUSED");
-        statusLabel.setBackground(Color.GRAY);
+      if (0 < updateRate.getValue()) {
+        int sleepPeriod = (updateRate.getMaximum() - updateRate.getValue()) * 500;
+        updateRateLabel.setText(MessageFormat.format("Update rate [{0,number,#.#} s]",
+            sleepPeriod / 1000.f));
+        serviceProvider.setSleep(sleepPeriod);
+      } else {
+        updateRateLabel.setText("Update rate [PAUSED]");
+        if (serviceProvider.isGenerating()) {
+          serviceProvider.pauseGeneration();
+          statusLabel.setText("PAUSED");
+          statusLabel.setBackground(Color.GRAY);
+        }
       }
     }//GEN-LAST:event_updateRateStateChanged
 
     private void poolSizeStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_poolSizeStateChanged
     {//GEN-HEADEREND:event_poolSizeStateChanged
-      handler.setPoolSize((Integer) poolSize.getValue());
+      serviceProvider.setPoolSize((Integer) poolSize.getValue());
     }//GEN-LAST:event_poolSizeStateChanged
 
     private void blockSizeStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_blockSizeStateChanged
     {//GEN-HEADEREND:event_blockSizeStateChanged
-      handler.setBlockSize((Integer) blockSize.getValue());
+      serviceProvider.setBlockSize((Integer) blockSize.getValue());
     }//GEN-LAST:event_blockSizeStateChanged
 
   private void transportSelected(java.awt.event.ActionEvent evt)//GEN-FIRST:event_transportSelected
@@ -390,7 +414,7 @@ public class DemoProviderGui extends javax.swing.JFrame
       newProtocol = evt.getActionCommand();
     }
 
-    boolean isGenerating = handler.isGenerating();
+    boolean isGenerating = serviceProvider.isGenerating();
 
     if (isGenerating)
     {
@@ -399,15 +423,15 @@ public class DemoProviderGui extends javax.swing.JFrame
 
     try
     {
-      handler.startServices(newProtocol);
+      serviceProvider.startServices(newProtocol);
     }
     catch (MALException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider", ex);
     }
     catch (MALInteractionException ex)
     {
-      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider {0}", ex);
+      LOGGER.log(Level.SEVERE, "Exception thrown during initialisation of Demo Provider", ex);
     }
 
     if (isGenerating)
@@ -426,9 +450,10 @@ public class DemoProviderGui extends javax.swing.JFrame
   private javax.swing.JPanel controlsPanel;
   private javax.swing.JMenuItem defaultTransportMenuItem;
   private javax.swing.JMenuItem genTMMenuItem;
-  private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
+  private javax.swing.JLabel jLabel5;
+  private javax.swing.JLabel jLabel6;
   private javax.swing.JMenu jMenu1;
   private javax.swing.JMenu jMenu2;
   private javax.swing.JMenu jMenu3;
@@ -439,9 +464,11 @@ public class DemoProviderGui extends javax.swing.JFrame
   private javax.swing.JMenuItem pauseTMMenuItem;
   private javax.swing.JSpinner poolSize;
   private javax.swing.JMenuItem quitMenuItem;
+  private javax.swing.JPanel sliderPanel;
   private javax.swing.JLabel statusLabel;
   private javax.swing.JLabel statusMessageLabel;
   private javax.swing.JPanel statusPanel;
   private javax.swing.JSlider updateRate;
+  private javax.swing.JLabel updateRateLabel;
   // End of variables declaration//GEN-END:variables
 }

@@ -188,7 +188,7 @@ public class DemoProviderServiceImpl extends BasicMonitorInheritanceSkeleton
     }
     catch (IOException ex)
     {
-      DemoProviderGui.LOGGER.log(Level.WARNING, "Unable to write URI information to properties file {0}", ex);
+      DemoProviderGui.LOGGER.log(Level.WARNING, "Unable to write URI information to properties file", ex);
     }
     
     if (wasRegistered)
@@ -221,7 +221,7 @@ public class DemoProviderServiceImpl extends BasicMonitorInheritanceSkeleton
     }
     catch (MALException ex)
     {
-      DemoProviderGui.LOGGER.log(Level.WARNING, "Exception during close down of the provider {0}", ex);
+      DemoProviderGui.LOGGER.log(Level.WARNING, "Exception during close down of the provider", ex);
     }
   }
 
